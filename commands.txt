@@ -64,7 +64,7 @@ import matplotlib.pyplot as plt
 films = pd.read_csv("films.csv")
 
 plt.figure(figsize=(7, 5))
-plt.scatter(films["budget"], films["revenue"], alpha=0.5)
+plt.scatter(films["budget_musd"], films["revenue_musd"], alpha=0.5)
 plt.xlabel("Budget")
 plt.ylabel("Revenue")
 plt.title("Budget vs. Revenue")
@@ -91,7 +91,7 @@ import matplotlib.pyplot as plt
 films = pd.read_csv("films.csv")
 
 plt.figure(figsize=(7, 5))
-plt.scatter(films["runtime"], films["imdb_rating"], alpha=0.5)
+plt.scatter(films["runtime_min"], films["imdb_rating"], alpha=0.5)
 plt.xlabel("Runtime (minutes)")
 plt.ylabel("IMDb Rating")
 plt.title("Runtime vs. IMDb Rating")
@@ -138,7 +138,7 @@ The James Bond films in this dataset span from `{python} int(bond["year"].min())
 #| fig-cap: "James Bond film revenue over time"
 
 plt.figure(figsize=(7, 5))
-plt.plot(bond["year"], bond["revenue"], marker="o")
+plt.plot(bond["year"], bond["revenue_musd"], marker="o")
 plt.xlabel("Release Year")
 plt.ylabel("Revenue")
 plt.title("James Bond Revenue Over Time")
