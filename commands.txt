@@ -1,0 +1,177 @@
+# Setup
+touch commands.txt
+
+# Task 01
+quarto create project website .
+
+# Task 02
+echo "/_site/" >> .gitignore
+echo "__pycache__/" >> .gitignore 
+
+git add .gitignore
+git commit -m "Add gitignore"
+
+# Task 03
+sed -i '' 's/title: "website"/title: "Box Office Numbers"/' _quarto.yml
+
+# Task 04
+rm about.qmd
+sed -i '' '/- about.qmd/d' _quarto.yml
+
+cat << 'EOF' > _quarto.yml
+project:
+  type: website
+
+website:
+  title: "Box Office Numbers"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: budget-revenue.qmd
+        text: Budget and Revenue
+      - href: runtime-rating.qmd
+        text: Runtime and Ratings
+      - href: bond.qmd
+        text: The Bond Films
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+execute:
+  freeze: auto
+EOF
+
+# Task 07
+cat << 'EOF' > budget-revenue.qmd
+---
+title: "Budget and Revenue"
+---
+
+This page explores the relationship between film production budgets and box office revenue. 
+
+```{python}
+#| echo: true
+#| label: fig-budget-revenue
+#| fig-cap: "Relationship between film production budget and box office revenue"
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+films = pd.read_csv("films.csv")
+
+plt.figure(figsize=(7, 5))
+plt.scatter(films["budget"], films["revenue"], alpha=0.5)
+plt.xlabel("Budget")
+plt.ylabel("Revenue")
+plt.title("Budget vs. Revenue")
+plt.show()
+```
+EOF
+
+# Task 08
+cat << 'EOF' > runtime-rating.qmd
+---
+title: "Runtime and Ratings"
+---
+
+This page examines the relationship between film runtime and IMDb ratings. 
+
+```{python}
+#| echo: true
+#| label: fig-runtime-rating
+#| fig-cap: "Relationship between film runtime and IMDb rating"
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+films = pd.read_csv("films.csv")
+
+plt.figure(figsize=(7, 5))
+plt.scatter(films["runtime"], films["imdb_rating"], alpha=0.5)
+plt.xlabel("Runtime (minutes)")
+plt.ylabel("IMDb Rating")
+plt.title("Runtime vs. IMDb Rating")
+plt.show()
+```
+
+## Average IMDb Rating by Decade
+
+The following table reports the mean IMDb rating for films released in each decade.
+
+```{python}
+#| echo: true
+
+films["decade"] = films["year"] // 10 * 10
+films.groupby("decade")["imdb_rating"].mean().round(2)
+```
+EOF
+
+# Task 09
+cat << 'EOF' > bond.qmd
+---
+title: "The Bond Films"
+---
+
+This page explores how James Bond film revenues have changed over time.
+
+```{python}
+#| echo: true
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+films = pd.read_csv("films.csv")
+
+bond = films[films["franchise"] == "James Bond"]
+bond = bond.sort_values("year")
+```
+
+The James Bond films in this dataset span from `{python} int(bond["year"].min())` to `{python} int(bond["year"].max())`.
+
+```{python}
+#| echo: true
+#| label: fig-bond-revenue
+#| fig-cap: "James Bond film revenue over time"
+
+plt.figure(figsize=(7, 5))
+plt.plot(bond["year"], bond["revenue"], marker="o")
+plt.xlabel("Release Year")
+plt.ylabel("Revenue")
+plt.title("James Bond Revenue Over Time")
+plt.show()
+```
+EOF
+
+# Task 05
+sed -i '' 's/theme: .*/theme: flatly/' _quarto.yml
+
+# Task 06
+cat << 'EOF' > index.qmd
+---
+title: "Box Office Numbers"
+---
+
+This website explores a dataset of films released between 1980 and 2025, including production budgets, worldwide box office revenues, runtimes, and IMDb ratings. Financial figures are approximate, reported in millions of US dollars, and are not adjusted for inflation. The analyses examine relationships between film characteristics, ratings, and box office performance.
+
+## Film Analyses
+
+- [Budget and Revenue](budget-revenue.qmd)
+- [Runtime and Ratings](runtime-rating.qmd)
+- [The Bond Films](bond.qmd)
+
+ChatGPT (OpenAI) used for assistance with Quarto formatting.
+EOF
+
+# Task 10
+quarto render
+ls -la _freeze/
+grep -A 2 '^execute:' _quarto.yml
+
+git add A
+git commit -m "Add site pages and freeze"
+
+# Task 11

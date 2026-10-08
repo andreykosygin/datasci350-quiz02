@@ -1,0 +1,23 @@
+---
+title: "Budget and Revenue"
+---
+
+This page explores the relationship between film production budgets and box office revenue. 
+
+```{python}
+#| echo: true
+#| label: fig-budget-revenue
+#| fig-cap: "Relationship between film production budget and box office revenue"
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+films = pd.read_csv("films.csv")
+
+plt.figure(figsize=(7, 5))
+plt.scatter(films["budget_musd"], films["revenue_musd"], alpha=0.5)
+plt.xlabel("Budget")
+plt.ylabel("Revenue")
+plt.title("Budget vs. Revenue")
+plt.show()
+```

@@ -1,0 +1,32 @@
+---
+title: "The Bond Films"
+---
+
+This page explores how James Bond film revenues have changed over time.
+
+```{python}
+#| echo: true
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+films = pd.read_csv("films.csv")
+
+bond = films[films["franchise"] == "James Bond"]
+bond = bond.sort_values("year")
+```
+
+The James Bond films in this dataset span from `{python} int(bond["year"].min())` to `{python} int(bond["year"].max())`.
+
+```{python}
+#| echo: true
+#| label: fig-bond-revenue
+#| fig-cap: "James Bond film revenue over time"
+
+plt.figure(figsize=(7, 5))
+plt.plot(bond["year"], bond["revenue_musd"], marker="o")
+plt.xlabel("Release Year")
+plt.ylabel("Revenue")
+plt.title("James Bond Revenue Over Time")
+plt.show()
+```
