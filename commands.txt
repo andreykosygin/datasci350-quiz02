@@ -171,7 +171,13 @@ quarto render
 ls -la _freeze/
 grep -A 2 '^execute:' _quarto.yml
 
-git add A
+git add -A
 git commit -m "Add site pages and freeze"
 
 # Task 11
+quarto publish gh-pages
+
+# Task 13
+git add -A
+git commit -m "Add command log"
+git push
